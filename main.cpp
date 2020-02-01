@@ -419,7 +419,7 @@ int main(){
 
 
         // Move enemies ..
-
+        
         handleEnemyMovements();
 
 
@@ -434,7 +434,7 @@ int main(){
 
         for (uint8_t i = 0; i < Constants::numberOfEnemies; i++) {
 
-            PD::drawBitmap(+enemies[i].x + player.x, +enemies[i].y + player.y, Data::Player);
+            PD::drawBitmap(+enemies[i].x + player.x, +enemies[i].y + player.y, Data::Enemy);
             
         }
 
