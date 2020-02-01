@@ -386,6 +386,54 @@
 		},
 		"/images/Enemy.h": {
 			"sdcard": false
+		},
+		"/images/Enemy copy.png": {
+			"sdcard": false
+		},
+		"/images/Brick.png": {
+			"sdcard": false
+		},
+		"/images/Brick copy.png": {
+			"sdcard": false
+		},
+		"/images/Door_Open.png": {
+			"sdcard": false
+		},
+		"/images/Door_Open copy.png": {
+			"sdcard": false
+		},
+		"/images/Door_Closed.png": {
+			"sdcard": false
+		},
+		"/images/Door_Closed copy.png": {
+			"sdcard": false
+		},
+		"/images/Key.png": {
+			"sdcard": false
+		},
+		"/images/Door_Open.h": {
+			"sdcard": false
+		},
+		"/images/Key.h": {
+			"sdcard": false
+		},
+		"/images/Brick.h": {
+			"sdcard": false
+		},
+		"/images/Door_Closed.h": {
+			"sdcard": false
+		},
+		"/Tilemap_6.elf": {
+			"sdcard": false
+		},
+		"/Tilemap_6.bin": {
+			"sdcard": false
+		},
+		"/images/Carpet.png": {
+			"sdcard": false
+		},
+		"/images/Carpet.h": {
+			"sdcard": false
 		}
 	}
 }

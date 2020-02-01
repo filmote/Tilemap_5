@@ -44,6 +44,11 @@ enum TileType {
 	Green = 1,
 	Tree = 2,
 	Grass = 3,
+	Brick = 4,
+	Door_Closed = 5,
+	Door_Open = 6,
+	Key = 7,
+	Carpet = 8,
 	
 }; 
 
@@ -73,6 +78,7 @@ struct Player : Entity {
     
     int16_t xOffset;
     int16_t yOffset;
+    bool hasKey = false;
 
     int16_t getPositionInWorldX() { return Constants::screenCentreX - x - xOffset; }
     int16_t getPositionInWorldY() { return Constants::screenCentreY - y - yOffset; }
@@ -143,17 +149,31 @@ bool checkMovement(Entity &entity, int16_t x, int16_t y, Direction direction) {
             break;
             
     }
+
+
+    // If this is the player and the tile is a key, pick it up.
+    
+    if (&entity == &player) {
+
+        if (tileId1 == TileType::Key || tileId2 == TileType::Key) {
+            
+            player.hasKey = true;
+            
+            
+        }
+        
+    }
     
 
 
     // If either tile is not green, do not move.
     
-    if (tileId1 != TileType::Green || tileId2 != TileType::Green) {
-        return false;
+    if ((tileId1 == TileType::Green || tileId1 == TileType::Carpet) && (tileId2 == TileType::Green || tileId2 == TileType::Carpet)) {
+        return true;
         
     }
 
-    return true;
+    return false;
         
 }
 
@@ -384,6 +404,11 @@ int main(){
     tilemap.tiles[TileType::Tree] = Data::tree16;
     tilemap.tiles[TileType::Grass] = Data::grass16;
     tilemap.tiles[TileType::Water] = Data::water16;
+    tilemap.tiles[TileType::Brick] = Data::brick16;
+    tilemap.tiles[TileType::Door_Open] = Data::door_open16;
+    tilemap.tiles[TileType::Door_Closed] = Data::door_closed16;
+    tilemap.tiles[TileType::Key] = Data::key16;
+    tilemap.tiles[TileType::Carpet] = Data::carpet16;
 
 
     // Position the player into a vacant spot on the map ..
