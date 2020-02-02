@@ -29,6 +29,7 @@ namespace Constants {
     const uint16_t screenCentreX = PD::width / 2; 
     const uint16_t screenCentreY = PD::height / 2;
     
+    const uint16_t numberOfEnemies = 3;
 }
 
 
@@ -87,9 +88,7 @@ struct Enemy : Entity {
 // ---------------------------------------------------------------------------------------
 
 
-uint8_t worldMap[128];
-uint8_t currentWorld = 0;
-uint16_t numberOfEnemies = 0;
+uint8_t worldMap[Constants::mapTileWidth * Constants::mapTileHeight / 2];
 
 Tilemap tilemap;
 Player player;
@@ -99,28 +98,17 @@ Enemy enemies[3];
 // ---------------------------------------------------------------------------------------
 
 
-void initWorld(uint8_t worldIndex) {
+void initWorld() {
 
 
     // Populate the world data ..
     
-    for (uint8_t i = 0; i < 128; i++) {
+    for (uint8_t i = 0; i < Constants::mapTileWidth * Constants::mapTileHeight / 2; i++) {
         
-        worldMap[i] = Data::worldMaps[worldIndex][i];
-    }
-    
-
-    // Populate the enemy starting positions ..
-    
-    numberOfEnemies = Data::startingPostions[worldIndex][0];
-
-    for (uint8_t i = 0; i < numberOfEnemies; i++) {
-
-        enemies[i].x = Data::startingPostions[worldIndex][(i * 2) + 1];
-        enemies[i].y = Data::startingPostions[worldIndex][(i * 2) + 2];
+        worldMap[i] = Data::worldMap[i];
         
     }
-
+  
 }
 
 
@@ -261,9 +249,6 @@ bool checkMovement(Entity &entity, int16_t x, int16_t y, Direction direction) {
     int8_t tileId1 = 0;
     int8_t tileId2 = 0;
 
-    uint16_t xTile = x / Constants::tileWidth;
-    uint16_t yTile = y / Constants::tileHeight;
-
     uint16_t tile1Index;
     uint16_t tile2Index;
 
@@ -380,21 +365,7 @@ void handlePlayerMovements() {
 
     if (PC::buttons.pressed(BTN_LEFT) || PC::buttons.repeat(BTN_LEFT, 1))    { 
 
-        if (player.x - 1 <= 0) {
-            
-            player.x--;
-            
-            if (player.x = -1) {
-
-                player.x = Constants::worldWidth - 1;
-                
-                currentWorld--;
-                initWorld(currentWorld);
-                
-            }
-            
-        }
-        else if (checkMovement(player, player.x - 1, player.y, Direction::Left)) {
+        if (player.x > 0 && checkMovement(player, player.x - 1, player.y, Direction::Left)) {
 
             player.x--;
 
@@ -404,23 +375,11 @@ void handlePlayerMovements() {
     
     if (PC::buttons.pressed(BTN_RIGHT) || PC::buttons.repeat(BTN_RIGHT, 1))   { 
 
-        if (player.x + 1 >= Constants::worldWidth - player.width) {
+        if (player.x < Constants::worldWidth && checkMovement(player, player.x + 1, player.y, Direction::Right)) {
 
             player.x++;
+        
             
-            if (player.x == Constants::worldWidth) {
-
-                player.x = -player.width + 1;
-                currentWorld++;
-                initWorld(currentWorld);
-                
-            }
-
-        }
-        else if (checkMovement(player, player.x + 1, player.y, Direction::Right)) {
-
-            player.x++;
-
         }
 
     }
@@ -460,7 +419,7 @@ void handleEnemyMovements() {
     
     // Move each enemy individually ..
     
-    for (uint8_t i = 0; i < numberOfEnemies; i++) {
+    for (uint8_t i = 0; i < Constants::numberOfEnemies; i++) {
 
         if (player.x < enemies[i].x) {
 
@@ -502,7 +461,7 @@ void handleEnemyMovements() {
 // ---------------------------------------------------------------------------------------
 
 
-int main(){
+int main() {
 
     PC::begin();
     PD::loadRGBPalette(palettePico);   
@@ -531,12 +490,23 @@ int main(){
     
     player.x = 16;
     player.y = 150;
+
     
-    
+    // Position the enemies in a vacant spot ..
+
+    enemies[0].x = 81;
+    enemies[0].y = 49;
+
+    enemies[1].x = 161;
+    enemies[1].y = 49;
+
+    enemies[2].x = 193;
+    enemies[2].y = 64;
+
     
     // Initialise the world map and enemies ..
 
-    initWorld(0);
+    initWorld();
 
     
     while (PC::isRunning()) {
@@ -579,7 +549,7 @@ int main(){
         
         // Render enemies ..
 
-        for (uint8_t i = 0; i < numberOfEnemies; i++) {
+        for (uint8_t i = 0; i < Constants::numberOfEnemies; i++) {
 
             PD::drawBitmap(enemies[i].x + xViewPort, enemies[i].y + yViewPort, Images::Enemy);
             
@@ -588,7 +558,7 @@ int main(){
 
         // Check for collisions between the player and the enemy ..
 
-        for (uint8_t i = 0; i < numberOfEnemies; i++) {
+        for (uint8_t i = 0; i < Constants::numberOfEnemies; i++) {
 
             if (collide(player, enemies[i])) {
                 
