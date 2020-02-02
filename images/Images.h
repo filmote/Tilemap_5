@@ -5,7 +5,7 @@ using PC = Pokitto::Core;
 using PD = Pokitto::Display;
 
 
-namespace Data {
+namespace Images {
 
     #include "Green.h"
     #include "Grass.h"
