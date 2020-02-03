@@ -103,7 +103,7 @@ void initWorld() {
 
     // Populate the world data ..
     
-    for (uint8_t i = 0; i < Constants::mapTileWidth * Constants::mapTileHeight / 2; i++) {
+    for (uint16_t i = 0; i < Constants::mapTileWidth * Constants::mapTileHeight / 2; i++) {
         
         worldMap[i] = Data::worldMap[i];
         
